@@ -56,7 +56,39 @@
 			IF @fechaFin = @actual
 				--aqui se procesa todo
 			ELSE
-				--aqui se hacen los calculos de intereses del día
+				--aqui se pregunta si es el día del ahorro del mes 
+				DECLARE @diaAhorro as int
+				SELECT @diaAhorro = DiasDeposito FROM CuentaObjetivo WHERE ID = @contador
+
+				IF @diaAhorro = @actual 
+					--PROCESAR DEPÓSITOS EN LA CO--
+
+					--primero se corrobora que la cuenta de ahorro tiene saldo suficiente para debitar el monto
+					DECLARE @SaldoRestante as float --aqui se guarda el restante de la CA después de debitar el monto del ahorro
+					DECLARE @montoAhorro as float
+					DECLARE @saldoCA as float
+					DECLARE @numCuenta as int
+
+					SELECT @montoAhorro = Cuota FROM CuentaObjetivo WHERE ID = @contador
+					SELECT @numCuenta = CuentadeAhorroID FROM CuentaObjetivo WHERE ID = @contador
+
+					SELECT @saldoCA = Saldo FROM CuentadeAhorro WHERE NumerodeCuenta = @numCuenta
+
+					SET @SaldoRestante = @saldoCA - @montoAhorro
+
+					IF @SaldoRestante >= 0 
+						 
+						
+
+
+
+
+
+
+
+					
+
+			
 
 			--Se aumenta el contador del while de cuentas de ahorro
 			SET @contador = @contador +1
