@@ -146,6 +146,8 @@ SELECT @Personas
 	 UPDATE #TablaCuentas
 	 SET FechaConstitucion = @Fecha
 	
+	--Aquí se hace el mapeo con el ID de la persona--
+
 
 	INSERT INTO dbo.CuentadeAhorro(TipoCuentaAhorroID, 
 								   NumerodeCuenta, 
