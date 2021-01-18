@@ -52,7 +52,7 @@
 			DECLARE @fechaFin as date
 			SELECT @fechaFin = FechaFin from dbo.CuentaObjetivo WHERE ID = @contador
 
-			--si la fecha fin coincide con el día actual entonces se procesa el cierre del ahorro
+			--PROCESAR REDENCIÓN DE CO-- 
 			IF @fechaFin = @actual
 				--aqui se procesa todo
 			ELSE
@@ -76,9 +76,35 @@
 
 					SET @SaldoRestante = @saldoCA - @montoAhorro
 
+					--se hace el rebajo en la CA
 					IF @SaldoRestante >= 0 
-						 
-						
+						UPDATE dbo.CuentadeAhorro
+						SET Saldo = @SaldoRestante
+						WHERE NumerodeCuenta = @numCuenta
+					
+						--creamos un nuevo movimiento para reflejar el debito en la CA
+						INSERT INTO dbo.MovimientoCA (TipoMovCAID, 
+													  numCuentaID, 
+													  Fecha, 
+													  Monto, 
+													  NuevoSaldo, 
+													  Descripcion, 
+													  Visible)
+
+						VALUES(3, @numCuenta, @actual, @montoAhorro, @SaldoRestante, 'Ahorro', 1)
+
+
+						--creamos un nuevo movimiento para reflejar el crédito en la CO	
+						INSERT INTO dbo.MovCO (TipoMovCOID, 
+											   Fecha, 
+											   Monto) 
+
+						VALUES (1, @actual, @montoAhorro)
+
+						--Se hace el incremento en el saldo la CO
+						UPDATE dbo.CuentaObjetivo
+						SET Saldo = Saldo + @montoAhorro
+						WHERE ID = @contador
 
 
 
@@ -88,7 +114,8 @@
 
 					
 
-			
+			--Proceso de acumulación de intereses
+
 
 			--Se aumenta el contador del while de cuentas de ahorro
 			SET @contador = @contador +1
