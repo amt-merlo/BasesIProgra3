@@ -175,7 +175,8 @@ SELECT @Personas
 								   fechaFinal date,
 								   objetivo nchar(60),
 								   saldo float,
-								   interesAcum float)
+								   interesAcum float,
+								   InsertedAt date)
 
 	--Tabla variable para ingresar los datos individuales
 	DROP TABLE IF EXISTS #numeroCA, #NumCuenta, #monto, #diaAhorro, #fechaFinal, #objetivo
@@ -236,6 +237,9 @@ SELECT @Personas
 
 	 UPDATE #TablaCuentasObj
 	 SET InteresAcum = 0.0
+
+	 UPDATE #TablaCuentasObj
+	 SET InsertedAt = @Fecha
 	
 
 	INSERT INTO dbo.CuentaObjetivo(CuentadeAhorroID, 
@@ -246,7 +250,8 @@ SELECT @Personas
 								   Objetivo,
 								   Saldo,
 								   InteresAcum,
-								   DiasDeposito) --corregir ID persona
+								   DiasDeposito,
+								   InsertedAt) --corregir ID persona
 
 							SELECT numeroCA, 
 								   NumeroCuenta,
@@ -256,7 +261,8 @@ SELECT @Personas
 								   objetivo,
 								   saldo,
 								   InteresAcum,
-								   diaAhorro FROM #TablaCuentasObj
+								   diaAhorro,
+								   InsertedAt FROM #TablaCuentasObj
 							
 
 	---------------------------PARA PARSEAR Beneficiarios---------------------------
@@ -268,7 +274,8 @@ SELECT @Personas
 	CREATE TABLE #TablaBeneficiarios(NumeroCuenta int, 
 									 ValorDocID int, 
 									 ParentescoID int, 
-									 Porcentaje int)
+									 Porcentaje int,
+									 InsertedAt date)
 
 	DECLARE @NumeroCuenta TABLE (ID INT IDENTITY, numCuenta int)
 	DECLARE @ValorDocID TABLE (ID INT IDENTITY, valorDocID int)
@@ -302,15 +309,20 @@ SELECT @Personas
 	LEFT JOIN @ParentescoID AS P ON P.ID = N.ID
 	LEFT JOIN @Porcentaje AS P2 ON P2.ID = N.ID
 
+	UPDATE #TablaBeneficiarios
+	SET InsertedAt = @Fecha
+
 	INSERT INTO dbo.Beneficiario(CuentadeAhorroID, 
 								 PersonaID, 
 								 ParentescoID, 
-								 Porcentaje)
+								 Porcentaje,
+								 InsertedAt)
 
 	SELECT NumeroCuenta, 
 		   ValorDocID, 
 		   ParentescoID, 
-		   Porcentaje FROM #TablaBeneficiarios
+		   Porcentaje,
+		   InsertedAt FROM #TablaBeneficiarios
 
 
 	---------------------------PARA PARSEAR USUARIOS---------------------------

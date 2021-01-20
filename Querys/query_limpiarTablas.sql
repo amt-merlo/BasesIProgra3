@@ -1,19 +1,28 @@
+--elimina los triggers
+DROP TRIGGER IF EXISTS  bitacoraCO_Delete1
+DROP TRIGGER IF EXISTS  bitacoraCO_Insert1
+DROP TRIGGER IF EXISTS  bitacoraBeneficiario_Insert1
+DROP TRIGGER IF EXISTS  bitacoraBeneficiario_Delete1
+
 DELETE FROM Usuario
 DELETE FROM Beneficiario
+DELETE FROM MovCO
+DELETE FROM MovCOInteres
+DELETE FROM MovimientoCA
 DELETE FROM EstadodeCuenta
-DELETE FROM CuentadeAhorro
 DELETE FROM CuentaObjetivo
+DELETE FROM CuentadeAhorro
 DELETE FROM Persona
 DELETE FROM Parentesco
+DELETE FROM Evento
 DELETE FROM TipoCuentaAhorro
 DELETE FROM TipoDocIdentidad
 DELETE FROM TipoMoneda
-DELETE FROM MovCO
-DELETE FROM MovCOInteres
 DELETE FROM TipoMovimientoCA
 DELETE FROM TipoMovimientoCO
 DELETE FROM TipoMovimientoCOI
-DELETE FROM MovimientoCA
+DELETE FROM TipoEvento
+
 
 
 DBCC CHECKIDENT (Usuario, RESEED, 0)
@@ -32,3 +41,5 @@ DBCC CHECKIDENT (TipoMovimientoCOI, RESEED, 0)
 DBCC CHECKIDENT  (MovimientoCA, RESEED, 0)
 DBCC CHECKIDENT (MovCO, RESEED, 0)
 DBCC CHECKIDENT (MovCOInteres, RESEED, 0)
+DBCC CHECKIDENT (TipoEvento, RESEED, 0)
+DBCC CHECKIDENT (Evento, RESEED, 0)
