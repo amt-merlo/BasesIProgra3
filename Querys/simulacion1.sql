@@ -106,8 +106,8 @@
 					VALUES(@contador, @actual, @totalInteres, 0)
 
 					--Creamos el movimiento en la tabla MovCo
-					INSERT INTO dbo.MovCO(TipoMovCOID, CuentaObjetivoID, Fecha, Monto)
-					VALUES(2, @contador, @actual, @totalInteres)
+					INSERT INTO dbo.MovCO(TipoMovCOID, CuentaObjetivoID, Fecha, Monto, Valido)
+					VALUES(2, @contador, @actual, @totalInteres, 1)
 
 					----Sumamos el interés acumulado al saldo de la CO
 					UPDATE dbo.CuentaObjetivo
@@ -170,6 +170,7 @@
 					
 						--se hace el rebajo en la CA
 						IF @SaldoRestante >= 0 
+						BEGIN
 							UPDATE dbo.CuentadeAhorro
 							SET Saldo = @SaldoRestante
 							WHERE NumerodeCuenta = @numCuenta
@@ -190,15 +191,27 @@
 							INSERT INTO dbo.MovCO (TipoMovCOID, 
 												   CuentaObjetivoID,
 												   Fecha, 
-												   Monto) 
+												   Monto,
+												   Valido) 
 
-							VALUES (1, @contador, @actual, @montoAhorro)
+							VALUES (1, @contador, @actual, @montoAhorro, 1)
 
 							--Se hace el incremento en el saldo la CO
 							UPDATE dbo.CuentaObjetivo
 							SET Saldo = Saldo + @montoAhorro
 							WHERE ID = @contador
+					 END
+					 ELSE
+					--creamos un nuevo movimiento para reflejar el crédito en la CO	
+							INSERT INTO dbo.MovCO (TipoMovCOID, 
+												   CuentaObjetivoID,
+												   Fecha, 
+												   Monto,
+												   Valido) 
 
+							VALUES (1, @contador, @actual, @montoAhorro, 0)
+
+							
 
 				END
 			

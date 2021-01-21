@@ -3,6 +3,8 @@ DROP TRIGGER IF EXISTS  bitacoraCO_Delete1
 DROP TRIGGER IF EXISTS  bitacoraCO_Insert1
 DROP TRIGGER IF EXISTS  bitacoraBeneficiario_Insert1
 DROP TRIGGER IF EXISTS  bitacoraBeneficiario_Delete1
+DROP TRIGGER IF EXISTS  bitacoraCO_Update1
+DROP TRIGGER IF EXISTS  bitacoraBeneficiario_Update1
 
 DELETE FROM Usuario
 DELETE FROM Beneficiario
